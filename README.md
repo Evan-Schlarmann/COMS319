@@ -1,6 +1,6 @@
 This application is for finding future friends that share possible interests and hobbies.
 
-HOW TO BUILD
+HOW TO BUILD ->
 1. Use "npm install" to build node_modules
 2. use "nodemon app" to start the app on localhost:3000
 
