@@ -1,0 +1,45 @@
+<html>
+	<%- include("../partials/head.ejs") %>
+	<body>
+		
+		<div class="container" >
+
+            <div class="row">
+                <div class="col-1" ></div>
+
+                
+                <div class="col-10">
+
+					<h1>319 Donations</h1>
+					<%- include("../partials/nav.ejs") %>
+
+					
+					<% if (donation != undefined) { %>
+						<h3><%= donation.name%></h3>
+
+						<ul>
+							<li>Email: <%= donation.email%></li>
+							<li>Charity: <%= donation.charity%></li>
+							<li>Amount: <b>$<%= donation.amount%> </b> </li>
+							<li>Timestamp: <%= donation.createdAt.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric",minute:"numeric",second:"numeric"})  %></li>
+						</ul>
+
+						<form action="/donations" method="POST">
+							<input type="hidden" name="donation_id" value="<%= donation.id %>" />
+							<button type="submit" class="btn btn-danger"> Delete </button> 
+						   </form>
+
+						<% } %>
+					
+					<%- include("../partials/footer.ejs") %>
+
+                </div>
+
+                <div class="col-1"></div>
+
+            </div>
+
+        </div>
+	
+	</body>
+</html>

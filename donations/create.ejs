@@ -1,0 +1,87 @@
+<html>
+	<%- include("../partials/head.ejs") %>
+	<body>
+		
+		<div class="container" >
+
+            <div class="row">
+                <div class="col-1" ></div>
+
+                
+                <div class="col-10">
+
+					<h1>319 Donations</h1>
+					<%- include("../partials/nav.ejs") %>
+
+					<form action="/donations" method="POST">
+						<div class="col-md-6">
+							<label for="name" class="form-label">Full Name</label>
+							<input type="text" class="form-control" id="name" name="name" >
+							<div class="valid-feedback">
+							  Looks good!
+							</div>
+							<div class="invalid-feedback">
+							  Must be like, "John Doe"
+							</div>
+						  </div>
+						  <div class="col-md-6">
+							<label for="email" class="form-label">Email</label>
+							<input type="email" class="form-control" id="email" name="email">
+							<div class="valid-feedback">
+							  Looks good!
+							</div>
+							<div class="invalid-feedback">
+							  Must be like, "abc@xyz.efg"
+							</div>
+						  </div>
+						  <div class="col-md-6">
+							<label for="charity" class="form-label">Charity</label>
+							<select class="form-control" id="charity" name="charity">
+								<option value="">---</option>
+								<option value="save the children">Save the children</option>
+								<option value="goodwill">Goodwill</option>
+								<option value="wildlife fund">Wildlife fund</option>
+								<option value="doctors without borders">Doctors without borders</option>
+							</select>
+							<div class="valid-feedback">
+							  Looks good!
+							</div>
+							<div class="invalid-feedback">
+							  Must be like, "abc@xyz.efg"
+							</div>
+						  </div>
+						  <div class="col-md-6">
+							<label for="amount" class="form-label">Amount</label>
+							<input type="text" class="form-control" id="amount" name="amount" >
+							<div class="valid-feedback">
+							  Looks good!
+							</div>
+							<div class="invalid-feedback">
+							  Must be like a numeric value between (20 - 1,000,000)
+							</div>
+						  </div>
+						
+						  <div class="col-md-6">
+							
+							<button type="submit" style="margin-top:10px" class="btn btn-success"> <i class="bi-cash-coin"></i> Donate</button>
+						  </div>
+	  
+						
+					  </form>
+
+					  <%- include("../partials/footer.ejs") %>
+
+                </div>
+
+                <div class="col-1"></div>
+
+                
+            </div>
+
+        </div>
+		
+		
+		
+		
+	</body>
+</html>

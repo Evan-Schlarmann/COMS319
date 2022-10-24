@@ -1,0 +1,174 @@
+<html>
+	<%- include("../partials/head.ejs") %>
+	<body>
+		<div class="container" >
+            <div class="row">
+                <div class="col-1" ></div>
+				<div class="col-10" >
+
+					<h1>319 Donations</h1>
+					<%- include("../partials/nav.ejs") %>
+			
+					<table class="table">
+						<thead>
+							<th> Name</th>
+							<th> Email</th>
+							<th> Charity</th>
+							<th> Amount</th>
+							<th> Date</th>
+							<th> </th>
+						</thead>
+						<tbody>
+							<% if (donations.length > 0) { %>
+								<% var total = 0 %>
+							<% donations.forEach(donation => { %>
+							<tr>
+								<td> <a href="/donations/<%= donation._id %>" > <%= donation.name %> </a> </td>
+								<td> <%= donation.email %> </td>
+								<td> <%= donation.charity %> </td>
+								<td> $<%= donation.amount %> </td> 
+								<td> <%= donation.createdAt.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric",minute:"numeric",second:"numeric"})  %> </td> 
+								<td> <button class="btn btn-danger delete" data-doc="<%= donation._id %>"> <i class="bi-trash"></i> </button> </td> 
+								<% total += donation.amount %>
+							</tr>
+							<% }) %>
+							<% }%>
+
+							<tr>
+								<td> <b>Total</b> </td>
+								<td> </td>
+								<td> </td>							
+								<td> $<%= total %> </td> 
+								<td> </td>
+								<td> </td>
+							</tr>
+			
+						</tbody>
+					</table>
+
+					<hr style=" border: 10px solid grey;">
+
+					<form id="add-form" class="row g-3 needs-validation">
+						<div class="col-md-3">
+						  <label for="name" class="form-label">Name</label>
+						  <input type="text" class="form-control" id="name" name="name">
+						  <div class="valid-feedback">
+							Looks good!
+						  </div>
+						</div>
+						
+						<div class="col-md-3">
+						  <label for="email" class="form-label">Email</label>
+						  <div class="input-group has-validation">
+							<span class="input-group-text" id="inputGroupPrepend">@</span>
+							<input type="email" name="email" class="form-control" id="email" aria-describedby="inputGroupPrepend">
+							<div class="invalid-feedback">
+							  Specify email.
+							</div>
+						  </div>
+						</div>
+						
+						<div class="col-md-3">
+						  <label for="charity" class="form-label">Charity</label>
+						  <select class="form-select" id="charity" name="charity" required>
+							<option value="">---</option>
+								<option value="save the children">Save the children</option>
+								<option value="goodwill">Goodwill</option>
+								<option value="wildlife fund">Wildlife fund</option>
+								<option value="doctors without borders">Doctors without borders</option>
+						  </select>
+						  <div class="invalid-feedback">
+							Pick a charity.
+						  </div>
+						</div>
+						<div class="col-md-3">
+						  <label for="amount" class="form-label">Amount</label>
+						  <input type="text" name="amount" class="form-control" id="amount">
+						  <div class="invalid-feedback">
+							In USD.
+						  </div>
+						</div>
+						
+						<div class="col-12">
+							<button type="submit" style="margin-top:10px" class="btn btn-success"> <i class="bi-cash-coin"></i> Donate</button>
+						</div>
+					  </form>
+
+
+					  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+						<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+						  <div class="toast-header">
+							
+							<strong class="me-auto"> <i class="bi-cash-coin"></i> &nbsp; 319 Donations</strong>
+							<small>0 mins ago</small>
+							<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+						  </div>
+						  <div class="toast-body" id="toast-body">
+							Added new donation!
+						  </div>
+						</div>
+					  </div>
+			
+					<%- include("../partials/footer.ejs") %>
+
+				</div>
+
+
+				<div class="col-1"></div>
+            </div>
+
+        </div>
+
+		<script>
+			const trashcans = document.querySelectorAll("button.delete")
+			trashcans.forEach(trashcan => {
+				trashcan.addEventListener('click', (event) => {
+					const url = `/donations/${trashcan.dataset.doc}`
+
+					fetch(url, {
+						method: 'DELETE'
+					}).then((response) => response.json())
+					.then((data) => window.location.href = data.redirect)
+					.catch((err) => console.log(err))
+				})
+			})
+
+			const addForm = document.getElementById("add-form")
+			addForm.addEventListener('submit', event => {
+				event.preventDefault()
+				event.stopPropagation()
+
+				var formData = new FormData(addForm)
+
+				const formDataObject = {}
+				for(var key of formData.entries()) {
+					formDataObject[key[0]] = key[1]
+				}
+
+				fetch("/add_donation/", {
+					headers: {'Content-Type': 'application/json'},
+					method: 'POST',
+					body:JSON.stringify(formDataObject),
+				})
+				.then((response) => response.json())
+				.then((data) => {
+					console.log("Added!" + JSON.stringify(data))
+					const toastLiveExample = document.getElementById('liveToast')
+					const toastBody = document.getElementById("toast-body")
+					toastBody.innerHTML = `${data.name} donated $${data.amount}`
+					const toast = new bootstrap.Toast(toastLiveExample)
+					toast.show()
+					document.getElementById('name').value = ""
+					document.getElementById('email').value = ""
+					document.getElementById('charity').value = ""
+					document.getElementById('amount').value = ""
+				})
+				.catch((err) => {
+					console.log(err)
+				})
+			}, false)
+			
+		</script>
+
+	</body>
+</html>
