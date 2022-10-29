@@ -4,7 +4,6 @@ const { json } = require('express');
 const express = require('express');
 const mongoose = require('mongoose')
 const Donation = require('./models/donation');
-const { serverInfo } = require('./config');
 
 // express app
 const app = express();
@@ -21,7 +20,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 //EDIT CONNECTION STRING
-const dbURI = 'mongodb+srv://' + config.server + '@cluster0.ezpntnj.mongodb.net/' + serverInfo;
+const dbURI = config.dbLink;
 
 mongoose.connect(dbURI).then((result) => {
   console.log("connected to db..")
